@@ -25,14 +25,17 @@ export default function AnimatedNumber({
   const [display, setDisplay] = useState(value);
   const prevValue = useRef(value);
 
+  // Mouvement réduit : saute directement à la valeur finale, en phase de
+  // rendu plutôt que dans l'effet, cf.
+  // https://react.dev/learn/you-might-not-need-an-effect.
+  if (reducedMotion && display !== value) {
+    setDisplay(value);
+  }
+
   useEffect(() => {
     if (prevValue.current === value) return;
     prevValue.current = value;
-
-    if (reducedMotion) {
-      setDisplay(value);
-      return;
-    }
+    if (reducedMotion) return;
 
     const id = anim.addListener(({ value: v }) => setDisplay(Math.round(v)));
     Animated.timing(anim, {

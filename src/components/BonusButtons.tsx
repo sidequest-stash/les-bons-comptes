@@ -1,7 +1,7 @@
 // Saisie du bonus : paliers −10 / −5 / +5 / +10 dans un seul cadre (charte §06)
 // ET saisie manuelle au clavier. La valeur démarre à 0 ; les boutons ajoutent
 // leur montant, le champ central reste éditable.
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { alpha, colors, fonts } from '../theme';
 
@@ -22,13 +22,12 @@ export default function BonusButtons({ value, onChange }: Props) {
   // État texte local pour permettre la saisie manuelle (dont le signe « - »).
   const [text, setText] = useState(value === 0 ? '' : String(value));
 
-  // Reflète les changements externes (boutons, reset) sans gêner la frappe.
-  useEffect(() => {
-    if (parseBonus(text) !== value) {
-      setText(value === 0 ? '' : String(value));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  // Reflète les changements externes (boutons, reset) sans gêner la frappe —
+  // ajustement en phase de rendu plutôt qu'un effet, cf.
+  // https://react.dev/learn/you-might-not-need-an-effect.
+  if (parseBonus(text) !== value) {
+    setText(value === 0 ? '' : String(value));
+  }
 
   const apply = (delta: number) => onChange(value + delta);
 

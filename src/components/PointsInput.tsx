@@ -1,6 +1,6 @@
 // Saisie numérique bornée (ex. points bruts d'une manche de Belote, 0..162).
 // `value` peut être `null` tant que rien n'a été saisi (champ vide, pas de 0 implicite).
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, TextInput } from 'react-native';
 import { alpha, colors, fonts } from '../theme';
 
@@ -20,12 +20,13 @@ export default function PointsInput({
   label,
 }: Props) {
   const [text, setText] = useState(value == null ? '' : String(value));
-
-  useEffect(() => {
-    const currentNum = text === '' ? null : Number(text);
-    if (currentNum !== value) setText(value == null ? '' : String(value));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  // Resynchronise l'affichage quand `value` change de l'extérieur (correction
+  // d'une autre manche, reset) sans gêner la frappe — ajustement en phase de
+  // rendu plutôt qu'un effet, cf. https://react.dev/learn/you-might-not-need-an-effect.
+  const currentNum = text === '' ? null : Number(text);
+  if (currentNum !== value) {
+    setText(value == null ? '' : String(value));
+  }
 
   const commit = (raw: string) => {
     const cleaned = raw.replace(/[^0-9]/g, '');

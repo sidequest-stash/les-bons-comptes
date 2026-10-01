@@ -163,3 +163,12 @@ export function tricksEnteredForRound(game: Game, round: number): number {
     return sum + (t ?? 0);
   }, 0);
 }
+
+/** Somme des mises saisies sur une manche (compteur « total des mises » affiché à la saisie). */
+export function bidsEnteredForRound(game: Game, round: number): number {
+  const byPlayer = game.rounds[round] ?? {};
+  return game.players.reduce((sum, p) => {
+    const b = byPlayer[p.id]?.bid;
+    return sum + (b ?? 0);
+  }, 0);
+}

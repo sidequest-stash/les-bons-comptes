@@ -64,3 +64,17 @@ export function getFormat(key: string): FormatDef {
   if (!f) throw new Error(`Unknown format: ${key}`);
   return f;
 }
+
+/**
+ * Retrouve la clé du format dont `cardsPerRound` correspond — `Game` ne
+ * stocke que ce tableau, pas la clé choisie à la création (cf. « On remet
+ * ça », SetupScreen). `undefined` si aucun format ne correspond (ex. partie
+ * d'une version antérieure).
+ */
+export function findFormatKey(cardsPerRound: number[]): string | undefined {
+  return FORMATS.find(
+    (f) =>
+      f.cardsPerRound.length === cardsPerRound.length &&
+      f.cardsPerRound.every((c, i) => c === cardsPerRound[i]),
+  )?.key;
+}

@@ -20,7 +20,12 @@ import ScreenBackground from '../components/ScreenBackground';
 import ScreenHeader from '../components/ScreenHeader';
 import SectionTitle from '../components/SectionTitle';
 import ToggleRow from '../components/ToggleRow';
-import { DEFAULT_FORMAT_KEY, FORMATS, getFormat } from '../lib/formats';
+import {
+  DEFAULT_FORMAT_KEY,
+  FORMATS,
+  findFormatKey,
+  getFormat,
+} from '../lib/formats';
 import { getGame } from '../lib/games';
 import { finalizePlayerNames } from '../lib/names';
 import {
@@ -45,13 +50,26 @@ const FORMAT_OPTIONS: ChipOption[] = FORMATS.map((f) => ({
 export default function SetupScreen() {
   const setScreen = useStore((s) => s.setScreen);
   const startGame = useStore((s) => s.startGame);
+  const previousGame = useStore((s) => s.game);
 
+  // Repart des joueurs de la partie précédente (« On remet ça », remplacement
+  // d'une partie en cours) — à défaut, la grille vide habituelle.
   const [names, setNames] = useState<string[]>(() =>
-    Array(MIN_PLAYERS).fill(''),
+    previousGame && previousGame.players.length > 0
+      ? previousGame.players.map((p) => p.name)
+      : Array(MIN_PLAYERS).fill(''),
   );
-  const [formatKey, setFormatKey] = useState(DEFAULT_FORMAT_KEY);
-  const [systemKey, setSystemKey] = useState<ScoreSystem>(DEFAULT_SCORE_SYSTEM);
-  const [cannonballRule, setCannonballRule] = useState(false);
+  const [formatKey, setFormatKey] = useState(
+    () =>
+      (previousGame && findFormatKey(previousGame.cardsPerRound)) ??
+      DEFAULT_FORMAT_KEY,
+  );
+  const [systemKey, setSystemKey] = useState<ScoreSystem>(
+    () => previousGame?.scoreSystem ?? DEFAULT_SCORE_SYSTEM,
+  );
+  const [cannonballRule, setCannonballRule] = useState(
+    () => previousGame?.cannonballRule ?? false,
+  );
 
   const setName = (i: number, v: string) =>
     setNames((prev) => prev.map((n, idx) => (idx === i ? v : n)));

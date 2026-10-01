@@ -3,21 +3,10 @@
 // classement se réordonne en douceur (§07, 550 ms) et le total compte
 // jusqu'à sa nouvelle valeur plutôt que de sauter.
 import React, { useEffect } from 'react';
-import {
-  LayoutAnimation,
-  Platform,
-  StyleSheet,
-  Text,
-  UIManager,
-  View,
-} from 'react-native';
+import { LayoutAnimation, StyleSheet, Text, View } from 'react-native';
 import AnimatedNumber from './AnimatedNumber';
 import { alpha, colors, fonts } from '../theme';
 import { useReducedMotion } from '../lib/reducedMotion';
-
-if (Platform.OS === 'android') {
-  UIManager.setLayoutAnimationEnabledExperimental?.(true);
-}
 
 const RANK_SWAP_MS = 550;
 const RANK_SWAP_ANIMATION = {

@@ -1,5 +1,5 @@
 // Écran de saisie de la manche courante (Belote).
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -271,12 +271,11 @@ function PointsStepper({
   onChange: (value: number | null) => void;
 }) {
   const [text, setText] = useState(value == null ? '' : String(value));
-
-  useEffect(() => {
-    const current = text === '' ? null : Number(text);
-    if (current !== value) setText(value == null ? '' : String(value));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  // Resynchronise l'affichage quand `value` change de l'extérieur sans gêner
+  // la frappe — ajustement en phase de rendu plutôt qu'un effet, cf.
+  // https://react.dev/learn/you-might-not-need-an-effect.
+  const current = text === '' ? null : Number(text);
+  if (current !== value) setText(value == null ? '' : String(value));
 
   const clamp = (n: number) => Math.min(HAND_TOTAL_POINTS, Math.max(0, n));
   const apply = (delta: number) => onChange(clamp((value ?? 0) + delta));

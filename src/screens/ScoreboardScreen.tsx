@@ -153,7 +153,11 @@ export default function ScoreboardScreen() {
 const styles = StyleSheet.create({
   safe: { flex: 1 },
   container: { flex: 1, paddingHorizontal: 22, paddingTop: 22 },
-  body: { gap: 22, paddingBottom: 22 },
+  // paddingRight supplémentaire (en plus du paddingHorizontal du container) :
+  // la barre de défilement native colle au bord droit du cadre du ScrollView,
+  // au ras du tableau des manches — cet espace l'en détache visuellement
+  // (rendu natif seulement, invisible en preview web).
+  body: { gap: 22, paddingBottom: 22, paddingRight: 6 },
   meta: {
     fontFamily: fonts.monoMedium,
     fontSize: 10,

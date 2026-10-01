@@ -29,6 +29,10 @@ export default function WinnerCard({ label, name, score, detail }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // L'API Animated classique lit anim.current en rendu — idiome RN standard,
+  // incompatible avec la règle react-hooks/refs (pensée pour React Compiler)
+  // mais sûr ici : la valeur n'est jamais mutée en dehors de l'effet ci-dessus.
+  /* eslint-disable react-hooks/refs */
   return (
     <Animated.View
       style={{
@@ -55,6 +59,7 @@ export default function WinnerCard({ label, name, score, detail }: Props) {
       </View>
     </Animated.View>
   );
+  /* eslint-enable react-hooks/refs */
 }
 
 const styles = StyleSheet.create({

@@ -61,7 +61,7 @@ export default function HomeScreen() {
           inProgress ? (
             <View>
               <View style={styles.statusRow}>
-                <View>
+                <View style={styles.statusLeft}>
                   <Text style={styles.statusLabel}>En tête</Text>
                   <Text style={styles.leaderName} numberOfLines={1}>
                     {leader ?? '—'}
@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     gap: 14,
   },
+  statusLeft: { flex: 1, minWidth: 0 },
   statusRight: { alignItems: 'flex-end' },
   statusLabel: {
     fontFamily: fonts.monoMedium,

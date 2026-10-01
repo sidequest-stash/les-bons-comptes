@@ -72,7 +72,7 @@ export default function Sheet({
 
 const styles = StyleSheet.create({
   backdrop: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     backgroundColor: 'rgba(14,26,20,0.72)',
   },
   panel: {
